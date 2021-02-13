@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.heroesApi.model.Heroes;
 import com.heroesApi.repo.HeroesRepository;
 
+import javassist.NotFoundException;
+
 
 
 @Service
@@ -39,6 +41,21 @@ public class HeroesService {
 		final List<Heroes> heroes = new ArrayList<Heroes>();
 		repository.findByTitleContains(name).forEach(heroe -> heroes.add(heroe));
 		return heroes;
+	}
+	
+	public Heroes modificarHeroe(Heroes heroesDetails) throws NotFoundException {
+		Heroes heroe = repository.findById(heroesDetails.getId())
+               .orElseThrow(() -> new NotFoundException("Heroe no encontrado para ese id :: " + heroesDetails.getId()));
+		heroe.setId(heroesDetails.getId());
+		heroe.setName(heroesDetails.getName());
+		return repository.save(heroe);
+	}
+
+	public void deleteById(Integer id) {
+		repository.deleteById(id);
+	}
+	public void insertHeroe(Heroes heroesDetails) {
+		repository.save(heroesDetails);
 	}
 	
 }

@@ -7,4 +7,6 @@ CREATE TABLE heroes (
 
 INSERT INTO heroes (name) VALUES
   ('Superman'),
-  ('batman');
+  ('batman'),
+  ('asdmanasd'),
+  ('asdmanasd asdmanmas');
