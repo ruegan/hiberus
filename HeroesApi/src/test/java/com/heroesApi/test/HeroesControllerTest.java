@@ -1,91 +1,49 @@
 package com.heroesApi.test;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import com.heroesApi.Appmain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.heroesApi.ctrl.HeroesController;
-import com.heroesApi.model.Heroes;
-import com.heroesApi.repo.HeroesRepository;
-import com.heroesApi.serv.HeroesService;
-import com.heroesApi.serv.impl.HeroesServiceImpl;
+import static org.hamcrest.Matchers.is;
 
-import javassist.NotFoundException;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = Appmain.class)
 public class HeroesControllerTest {
 
-	@InjectMocks
-    HeroesServiceImpl heroesService;
-    
-    @Mock
-    HeroesRepository heroesRepository;
-    
-    @InjectMocks
-    HeroesController heroesController;
-
-
-    @BeforeEach
-    public void setup() {
-    	heroesController.setService(heroesService);
-    }
-    
-    @Test
-    public void testGetById() throws Exception{
-
-    	Heroes heroe1 = new Heroes(1,"superman");
-    	Heroes heroe2 = new Heroes(2,"batman");
-		List<Heroes> list = new ArrayList<Heroes>();
-		list.addAll(Arrays.asList(heroe1, heroe2));
-
-		when(heroesRepository.findAll()).thenReturn(list);
-		// when
-		List<Heroes> result = heroesController.getAll();
-
-		// then
-		assertThat(result.size()).isEqualTo(2);
-		
-		assertThat(result.get(0).getName())
-						.isEqualTo(heroe1.getName());
-		
-		assertThat(result.get(1).getName())
-						.isEqualTo(heroe2.getName());
-		
-    }
-    
-	@Test
-	public void testModificarHeroe() throws NotFoundException 
-	{
-		MockHttpServletRequest request = new MockHttpServletRequest();
-		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-
-		Heroes heroeToAdd = new Heroes(1,"Deadpool");
-		Optional<Heroes> heroe = Optional.of(new Heroes(1,"Superman"));
-		
-		when(heroesRepository.save(any(Heroes.class))).thenReturn(heroeToAdd);
-		
-		when(heroesRepository.findById(any(Integer.class))).thenReturn(heroe);
-		
-		ResponseEntity<Heroes> responseEntity = heroesController.modificarHeroe(heroeToAdd);
-		
-		assertThat(responseEntity.getStatusCodeValue()).isEqualTo(200);
-		assertThat(responseEntity.getBody().getName()).isEqualTo(heroeToAdd.getName());
+	@Autowired
+	private WebApplicationContext webAppContext;
+	private MockMvc mockMvc;
+	
+	@Before
+	public void setup() {
+	    MockitoAnnotations.initMocks(this);
+	    mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
 	}
+    @Test
+    public void getById() throws Exception {
+    	
+        mockMvc.perform(get("/heroes/getbyid/{id}", 1))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("id", is(1)))
+        .andExpect(jsonPath("name", is("Superman")));
+    }
+
 }
