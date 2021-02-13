@@ -1,4 +1,4 @@
-package com.heroesApi.ctrl;
+package com.heroesApi.test;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,9 +21,11 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.heroesApi.ctrl.HeroesController;
 import com.heroesApi.model.Heroes;
 import com.heroesApi.repo.HeroesRepository;
 import com.heroesApi.serv.HeroesService;
+import com.heroesApi.serv.impl.HeroesServiceImpl;
 
 import javassist.NotFoundException;
 
@@ -32,7 +33,7 @@ import javassist.NotFoundException;
 public class HeroesControllerTest {
 
 	@InjectMocks
-    HeroesService heroesService;
+    HeroesServiceImpl heroesService;
     
     @Mock
     HeroesRepository heroesRepository;

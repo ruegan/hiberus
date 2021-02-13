@@ -7,6 +7,13 @@ CREATE TABLE heroes (
 
 INSERT INTO heroes (name) VALUES
   ('Superman'),
-  ('batman'),
-  ('asdmanasd'),
-  ('asdmanasd asdmanmas');
+  ('Batman'),
+  ('Antman'),
+  ('Spiderman'),
+  ('Hulk'),
+  ('Sentry'),
+  ('Hawkeye'),
+  ('Flash'),
+  ('Hawkman'),
+  ('Aquaman'),
+  ('Nigthwing');

@@ -15,62 +15,62 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codahale.metrics.annotation.Timed;
 import com.heroesApi.model.Heroes;
 import com.heroesApi.serv.HeroesService;
-
-import javassist.NotFoundException;
-
-
+import com.heroesApi.serv.impl.HeroesServiceImpl;
+import com.heroesApi.utils.annotation.Temporizado;
 
 @RestController
 @RequestMapping("/heroes")
 public class HeroesController {
 	
-
 	private final Logger log = LoggerFactory.getLogger(this.getClass()); 
 
 	@Autowired
-	HeroesService service;
+	HeroesServiceImpl service;
 
-	
 	@GetMapping(value= "/getall", produces= "application/json")
-	@Timed(name = "timerName")
+	@Temporizado
 	public List<Heroes> getAll() {
-		log.info("Llamada getAll heroes.");
+		log.info("Llamada getAll.");
 		return service.getAll();
 	}
 	
 	@GetMapping(value= "/getbyid/{id}", produces= "application/json")
+	@Temporizado
 	public Heroes getById(@PathVariable("id") Integer id) {
-		log.info("Llamada getbyid heroes.");
+		log.info("Llamada getById.");
 		return service.getById(id);
 	}
 	
 	@GetMapping(value= "/getnamelike/{name}", produces= "application/json")
+	@Temporizado
 	public List<Heroes> getNameLike(@PathVariable("name") String name) {
-		log.info("Llamada getbyid heroes.");
+		log.info("Llamada getNameLike.");
 		return service.getNameLike(name);
 	}
 	
 	@PostMapping(value= "/modifheroe", consumes = "application/json", produces= "application/json")
-	public ResponseEntity<Heroes> modificarHeroe(@Valid @RequestBody Heroes member) throws NotFoundException {
-		log.info("Llamada getbyid heroes.");
+	@Temporizado
+	public ResponseEntity<Heroes> modificarHeroe(@Valid @RequestBody Heroes member){
+		log.info("Llamada modificarHeroe.");
 		final Heroes updatedHeroes = service.modificarHeroe(member);
 		return ResponseEntity.ok(updatedHeroes);
 	}
 	
 	@GetMapping(value= "/deleteheroe/{id}", produces= "application/json")
+	@Temporizado
 	public void deleteHeroe(@PathVariable("id") Integer id) {
-		log.info("Llamada deleteHeroe heroes.");
+		log.info("Llamada deleteHeroe.");
 		service.deleteById(id);
 	}
+
 
 	public HeroesService getService() {
 		return service;
 	}
 
-	public void setService(HeroesService service) {
+	public void setService(HeroesServiceImpl service) {
 		this.service = service;
 	}
 	

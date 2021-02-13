@@ -4,12 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-// @Entity annotation specifies that the class is mapped to a database table.
 @Entity
 public class Heroes {
 
-	// @Id annotation specifies the primary key of an entity.
-	// @GeneratedValue provides the generation strategy specification for the primary key values.
 	@Id
 	@GeneratedValue
 	private int id;
