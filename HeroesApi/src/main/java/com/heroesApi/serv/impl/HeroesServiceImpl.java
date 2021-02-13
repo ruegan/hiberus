@@ -40,7 +40,8 @@ public class HeroesServiceImpl implements HeroesService {
 	@Cacheable(value="getNameLike", key = "#name")
 	public List<Heroes> getNameLike(String name) {
 		final List<Heroes> heroes = new ArrayList<Heroes>();
-		repository.findByTitleContains(name).forEach(heroe -> heroes.add(heroe));
+		repository.findByTitleContains(name.toUpperCase()).forEach(heroe -> heroes.add(heroe));
+		if(heroes.size()==0) throw new DataNotFoundException("Heroes no encontrados que contengan :: " + name);
 		return heroes;
 	}
 	
