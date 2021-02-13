@@ -1,4 +1,4 @@
-package com.springboot.h2;
+package com.heroesApi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
